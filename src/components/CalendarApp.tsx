@@ -1,5 +1,5 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import { Calendar } from 'lucide-react';
+import { Calendar, KeyRound, LogOut } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { CalendarEvent } from '../types';
 import { EventList } from './EventList';
@@ -44,6 +44,14 @@ export function CalendarApp() {
     scope: 'https://www.googleapis.com/auth/calendar.readonly',
   });
 
+  const logout = () => {
+    localStorage.removeItem('calendarAccessToken');
+    localStorage.removeItem('tokenExpiry');
+
+    setAccessToken(null);
+    setEvents([]);
+  };
+
   const fetchCalendarEvents = async (token: string) => {
     try {
       const response = await fetch(
@@ -67,10 +75,10 @@ export function CalendarApp() {
 
       const data = await response.json();
 
-      // remove invalid events
+      // filter out invalid events
       const validEvents = data.items.filter((event: CalendarEvent) => {
         return (
-          event.summary &&
+          event.summary && 
           (event.start?.date || event.start?.dateTime) &&
           (event.end?.date || event.end?.dateTime)
         );
@@ -88,16 +96,12 @@ export function CalendarApp() {
 
     if (filter === 'upcoming') {
       filteredEvents = filteredEvents.filter((event) => {
-        const eventDate = new Date(
-          event.start.dateTime || event.start.date || ''
-        );
+        const eventDate = new Date(event.start.dateTime || event.start.date || '');
         return eventDate >= now;
       });
     } else if (filter === 'past') {
       filteredEvents = filteredEvents.filter((event) => {
-        const eventDate = new Date(
-          event.start.dateTime || event.start.date || ''
-        );
+        const eventDate = new Date(event.start.dateTime || event.start.date || '');
         return eventDate < now;
       });
     } else if (filter === 'birthdays') {
@@ -112,9 +116,7 @@ export function CalendarApp() {
       selectedDateEnd.setHours(23, 59, 59, 999);
 
       filteredEvents = filteredEvents.filter((event) => {
-        const eventDate = new Date(
-          event.start.dateTime || event.start.date || ''
-        );
+        const eventDate = new Date(event.start.dateTime || event.start.date || '');
         return eventDate >= selectedDateStart && eventDate <= selectedDateEnd;
       });
     }
@@ -130,21 +132,30 @@ export function CalendarApp() {
           <div className='flex flex-col items-center justify-center min-h-[80vh]'>
             <Calendar className='w-16 h-16 text-blue-400 mb-4' />
             <h1 className='text-3xl font-bold text-white mb-8'>
-              Calendar Events Viewer App
+              Calendar Events Viewer 
             </h1>
             <button
               onClick={() => login()}
-              className='px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2'
+              className='px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-3'
             >
-              <Calendar className='w-5 h-5' />
+              <KeyRound className='w-5 h-5' />
               Sign in with Google
             </button>
           </div>
         ) : (
           <div className='flex flex-col'>
-            <h1 className='text-3xl font-bold text-white mb-8'>
-              Your Calendar Events
-            </h1>
+            <div className='flex justify-between items-center mb-8'>
+              <h1 className='text-3xl font-bold text-white'>
+                Your Calendar Events
+              </h1>
+              <button
+                onClick={logout}
+                className='px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-colors flex items-center gap-2'
+              >
+                <LogOut className='w-5 h-5' />
+                Logout
+              </button>
+            </div>
 
             <div className='flex items-center gap-4 mb-6'>
               <div className='glassmorphic rounded-lg p-1 flex gap-1'>
