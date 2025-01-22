@@ -47,3 +47,7 @@ As this is a prototype, Google only allows test accounts. Evaluators may contact
 ## Video Demo
 
 A video demo of the application can be found [here](https://drive.google.com/file/d/1c7x2CD7ZYbjueHJLkghH0w2A5WfQCfPy/view?usp=sharing).
+
+## Live Demo
+
+A live demo of the application can be found [here](https://calendar-events-eta.vercel.app/).
