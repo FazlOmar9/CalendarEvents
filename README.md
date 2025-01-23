@@ -46,7 +46,7 @@ As this is a prototype, Google only allows test accounts. Evaluators may contact
 
 ## Video Demo
 
-A video demo of the application can be found [here](https://drive.google.com/file/d/1c7x2CD7ZYbjueHJLkghH0w2A5WfQCfPy/view?usp=sharing).
+A video demo of the application can be found [here](https://drive.google.com/file/d/1YK4oHWjy8JLaojbPCUuaDk3VPTllRZG3/view?usp=sharing).
 
 ## Live Demo
 
